@@ -1,0 +1,25 @@
+version: '3' # docker version
+services:
+  www:
+    build: . # Dựng từ Dockerfile trong thư mục hiện tại
+    volumes:
+      - "./:/var/www/html" # Đồng bộ hóa thư mục dự án với thư mục web container
+    ports:
+      - 89:80
+      - 433:433
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=users
+      - MYSQL_USER=nhom1
+      - MYSQL_PASSWORD=nhom1 
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1 # Cho phép empty password
+    volumes:
+     - "./db:/docker-entrypoint-initdb.d" # Tránh mất DB ngay cả khi Container dừng
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8001:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
